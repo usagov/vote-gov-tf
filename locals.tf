@@ -445,11 +445,27 @@ locals {
         ## Scheduled pipeline definitions.
         schedules = {
 
-          ## Runs the pipeline that builds the static site every 30 minutes.
-          build-static = {
-            name             = "${local.project}-static-${terraform.workspace}"
-            description      = "Build static files for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz"]
+
+          dev-test-upkeep = {
+            name             = "${local.project}-upkeep-for-${terraform.workspace}"
+            description      = "Run upkeep for ${terraform.workspace} environment."
+            ignore_workspace = ["bootstrap", "dmz", "stage", "prod"]
+            organization     = "usagov"
+            project          = "${local.project_full}-drupal"
+            per_hour         = 1
+            hours_of_day     = ["*"]
+            days_of_week     = ["*"]
+
+            parameters = {
+              branch = terraform.workspace
+              upkeep = true
+            }
+          }
+
+          stage-prod-upkeep = {
+            name             = "${local.project}-upkeep-for-${terraform.workspace}"
+            description      = "Run upkeep for ${terraform.workspace} environment."
+            ignore_workspace = ["bootstrap", "dmz", "dev", "test"]
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 2
@@ -457,36 +473,37 @@ locals {
             days_of_week     = ["*"]
 
             parameters = {
-              branch       = terraform.workspace
-              build_static = true
+              branch = terraform.workspace
+              upkeep = true
             }
           }
 
-          ## Runs the pipeline that runs 'drush cron' once an hour.
-          cron = {
-            name             = "${local.project}-cron-${terraform.workspace}"
-            description      = "The 'drush cron' job for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz"]
-            organization     = "usagov"
-            project          = "${local.project_full}-drupal"
-            per_hour         = 1
-            hours_of_day     = ["*"]
-            days_of_week     = ["*"]
-            parameters = {
-              branch     = terraform.workspace
-              drush_cron = true
-            }
-          }
+
 
           ## Runs the pipeline that backups the database, user uploaded content, and terraform state files once an hour.
-          scheduled-backup = {
+          prod-scheduled-backup = {
             name             = "${local.project}-scheduled-backup-${terraform.workspace}"
             description      = "A scheduled backup job for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz"]
+            ignore_workspace = ["bootstrap", "dmz", "test", "dev", "stage"]
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 1
             hours_of_day     = ["1", "16"]
+            days_of_week     = ["*"]
+            parameters = {
+              branch           = terraform.workspace
+              scheduled_backup = true
+            }
+          }
+
+          preprod-scheduled-backup = {
+            name             = "${local.project}-scheduled-backup-${terraform.workspace}"
+            description      = "A scheduled backup job for ${terraform.workspace} environment."
+            ignore_workspace = ["bootstrap", "dmz", "prod"]
+            organization     = "usagov"
+            project          = "${local.project_full}-drupal"
+            per_hour         = 1
+            hours_of_day     = ["16"]
             days_of_week     = ["*"]
             parameters = {
               branch           = terraform.workspace
