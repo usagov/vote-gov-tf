@@ -68,12 +68,8 @@ ln -s ${modsecurity_path} ${home}/deps/0/apt/etc/
 
 echo "Configuring WAF ACLs..."
 ## Insert the approved IP's into the WAF's configuration.
-export IPS_ALLOWED_CMS=$(echo $ALLOWED_IPS_CMS | base64 -d | jq -rc '.[] | @sh' | tr -d \' | sed 's/^/      /')
-PATH=${PATH}; envsubst < ${app_path}/nginx/snippets/ip-restrict-cms.conf.tmpl > ${app_path}/nginx/snippets/ip-restrict-cms.conf
-
-## Insert the denied IP's into the WAF's configuration.
-export IPS_DENYED_STATIC=$(echo $DENYED_IPS_STATIC | base64 -d | jq -rc '.[] | @sh' | tr -d \' | sed 's/^/      /')
-PATH=${PATH}; envsubst < ${app_path}/nginx/snippets/ip-restrict-static.conf.tmpl > ${app_path}/nginx/snippets/ip-restrict-static.conf
+export IPS_ALLOWED=$(echo $ALLOWED_IPS | base64 -d | jq -rc '.[] | @sh' | tr -d \' | sed 's/^/      /')
+PATH=${PATH}; envsubst < ${app_path}/nginx/snippets/allowed-ips.conf.tmpl > ${app_path}/nginx/snippets/allowed-ips.conf
 
 ## Move the default.conf to a temp file so it can be modified.
 mv ${app_path}/nginx/conf.d/default.conf ${app_path}/nginx/conf.d/default.conf.tmpl
