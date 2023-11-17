@@ -45,18 +45,15 @@ locals {
         environment = {
 
           ## IP addresses allowed to connected to the CMS.
-          ALLOWED_IPS_CMS = base64encode(
+          ALLOWED_IPS = base64encode(
             jsonencode([
               ## GSA VPN pool.
-              "allow 159.142.0.0/16;"
+              "159.142.0.0/16 allow;"
             ])
           )
 
           ## The OWASP CRS rules for modsecurity.
           CRS_RULES = "coreruleset-3.3.4.tar.gz"
-
-          ## IP address that are denied access from the static website.
-          DENYED_IPS_STATIC = base64encode(jsonencode([]))
 
           ## The current environment the application is running in.
           ENV = terraform.workspace
