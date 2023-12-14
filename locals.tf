@@ -48,7 +48,10 @@ locals {
           ALLOWED_IPS = base64encode(
             jsonencode([
               ## GSA VPN pool.
-              "159.142.0.0/16 allow;"
+              "159.142.0.0/16 allow;",
+              "173.66.119.38/32 allow;",
+              "10.190.128.0/22 allow;",
+              local.cloudfront_ips_allowed
             ])
           )
 
