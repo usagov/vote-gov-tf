@@ -148,4 +148,12 @@ locals {
       key
     ] if key != "all" || key != local.bootstrap_workspace
   ])
+
+  # internal terraform use variables
+  cloudfront_ips_raw = jsondecode(data.http.cloudfront_ips_json.response_body)
+  cloudfront_ips_allowed = flatten([
+    for list in local.cloudfront_ips_raw : [
+      for ip in list : "${ip} allow;"
+    ]
+  ])
 }

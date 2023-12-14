@@ -71,3 +71,10 @@ data "cloudfoundry_route" "egress_proxy" {
   domain   = data.cloudfoundry_domain.internal.id
   hostname = data.cloudfoundry_app.egress_proxy[0].name
 }
+
+data "http" "cloudfront_ips_json" {
+  url = "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
+  request_headers = {
+    Accept = "application/json"
+  }
+}
