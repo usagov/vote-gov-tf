@@ -14,7 +14,7 @@ locals {
 
   ## The names of the project's production workspaces. This is used to adjust
   ## settings dynamically throughout this configuration file.
-  production_workspaces = ["prod", "stage"]
+  production_workspaces = ["prod"]
 
   ## "Common" applications and services that are deployed to every space.
   globals = {
@@ -49,8 +49,6 @@ locals {
             jsonencode([
               ## GSA VPN pool.
               "159.142.0.0/16 allow;",
-              "173.66.119.38/32 allow;",
-              "10.190.128.0/22 allow;",
               local.cloudfront_ips_allowed
             ])
           )
@@ -155,7 +153,7 @@ locals {
         applications = ["drupal"]
 
         ## The size of the instance to deploy.
-        service_plan = contains(local.production_workspaces, terraform.workspace) ? "medium-mysql" : "micro-mysql"
+        service_plan = contains(local.production_workspaces, terraform.workspace) ? "medium-mysql-redundant" : "micro-mysql"
 
         ## The type of service to be deployed.
         service_type = "aws-rds"
