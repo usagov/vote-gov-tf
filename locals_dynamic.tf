@@ -151,9 +151,9 @@ locals {
 
   # internal terraform use variables
   cloudfront_ips_raw = jsondecode(data.http.cloudfront_ips_json.response_body)
-  cloudfront_ips_allowed = flatten([
+  cloudfront_ips_allowed = terraform.workspace == "prod" ? flatten([
     for list in local.cloudfront_ips_raw : [
       for ip in list : "${ip} allow;"
     ]
-  ])
+  ]) : []
 }
