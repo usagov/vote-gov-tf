@@ -54,7 +54,7 @@ locals {
           )
 
           ## The OWASP CRS rules for modsecurity.
-          CRS_RULES = "coreruleset-3.3.4.tar.gz"
+          CRS_RULES = "coreruleset-4.0.0.tar.gz"
 
           ## The current environment the application is running in.
           ENV = terraform.workspace
@@ -85,7 +85,7 @@ locals {
         }
 
         ## Maximum amount of memory the application can use.
-        memory = 64
+        memory = 96
 
         ## Addional network policies to add to the application.
         ## Format: name of the application and the port it is listening on.
@@ -307,13 +307,13 @@ locals {
       drupal = {
 
         ## How many instances of the application to run.
-        instances = 1
+        instances = 2
 
         ## Port is the application listening on.
         port = var.mtls_port
 
         ## How much memory should it be using?
-        memory = 512
+        memory = 1024
 
         enable_ssh = false
       }
@@ -467,7 +467,7 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 2
-            hours_of_day     = ["*"]
+            hours_of_day     = ["0", "2", "3", "4", "5", "6", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
             days_of_week     = ["*"]
 
             parameters = {
@@ -486,7 +486,7 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 1
-            hours_of_day     = ["1", "16"]
+            hours_of_day     = ["1", "7"]
             days_of_week     = ["*"]
             parameters = {
               branch           = terraform.workspace
@@ -501,7 +501,7 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 1
-            hours_of_day     = ["16"]
+            hours_of_day     = ["1"]
             days_of_week     = ["*"]
             parameters = {
               branch           = terraform.workspace
@@ -647,17 +647,12 @@ locals {
       }
 
       ## Variables that are globally used in every space.
-      circleci_variables = {
-        caddy = {
-          global = true
-          variables = [
-            "proxy_name",
-            "proxy_port",
-            "proxy_space",
-            "caddy_internal_endpoint"
-          ]
-        }
-      }
+      circleci_variables = [
+        "proxy_name",
+        "proxy_port",
+        "proxy_space",
+        "caddy_internal_endpoint"
+      ]
     }
 
     #################################
