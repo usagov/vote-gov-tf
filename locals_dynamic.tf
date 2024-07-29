@@ -56,9 +56,10 @@ locals {
           local.env.internal_domain,
           var.mtls_port
         )
-        ssg_uri = terraform.workspace == "prod" ? "https://ssg.vote.gov" : format(
+        ssg_uri = terraform.workspace == "prod" ? "https://vote.gov" : (terraform.workspace == "stage" ? "https://staging.vote.gov" : format(
           "https://ssg-%s.vote.gov",
           terraform.workspace
+          )
         )
         sso_x509_cert = var.sso_x509_cert
         waf_name      = format(local.env.name_pattern, "waf")
