@@ -85,7 +85,8 @@ locals {
         }
 
         ## Maximum amount of memory the application can use.
-        memory = 96
+        #memory = 96
+        memory = terraform.workspace == "prod" ? 512 : 96
 
         ## Addional network policies to add to the application.
         ## Format: name of the application and the port it is listening on.
@@ -300,7 +301,7 @@ locals {
         port = var.mtls_port
 
         ## How much memory should it be using?
-        memory = 512
+        memory = 700
       }
     }
     prod = {
@@ -315,6 +316,8 @@ locals {
         ## How much memory should it be using?
         memory = 1024
 
+        disk_quota = 3072
+
         enable_ssh = false
       }
     }
@@ -328,7 +331,7 @@ locals {
         port = var.mtls_port
 
         ## How much memory should it be using?
-        memory = 512
+        memory = 1024
       }
     }
     test = {
@@ -341,7 +344,7 @@ locals {
         port = var.mtls_port
 
         ## How much memory should it be using?
-        memory = 512
+        memory = 700
 
       }
     }
@@ -444,21 +447,21 @@ locals {
         schedules = {
 
 
-          dev-test-upkeep = {
-            name             = "${local.project}-upkeep-for-${terraform.workspace}"
-            description      = "Run upkeep for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz", "stage", "prod"]
-            organization     = "usagov"
-            project          = "${local.project_full}-drupal"
-            per_hour         = 1
-            hours_of_day     = ["*"]
-            days_of_week     = ["*"]
+          #dev-test-upkeep = {
+          #name             = "${local.project}-upkeep-for-${terraform.workspace}"
+          #description      = "Run upkeep for ${terraform.workspace} environment."
+          #ignore_workspace = ["bootstrap", "dmz", "stage", "prod"]
+          #organization     = "usagov"
+          #project          = "${local.project_full}-drupal"
+          #per_hour         = 1
+          #hours_of_day     = ["*"]
+          #days_of_week     = ["*"]
 
-            parameters = {
-              branch = terraform.workspace
-              upkeep = true
-            }
-          }
+          #parameters = {
+          #branch = terraform.workspace
+          #upkeep = true
+          #}
+          #}
 
           stage-prod-upkeep = {
             name             = "${local.project}-upkeep-for-${terraform.workspace}"
@@ -467,7 +470,7 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 2
-            hours_of_day     = ["0", "2", "3", "4", "5", "6", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+            hours_of_day     = ["0", "3", "4", "5", "6", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
             days_of_week     = ["*"]
 
             parameters = {
@@ -478,7 +481,7 @@ locals {
 
 
 
-          ## Runs the pipeline that backups the database, user uploaded content, and terraform state files once an hour.
+          ## Runs the pipeline that backups the database, user uploaded content, and terraform state files.
           prod-scheduled-backup = {
             name             = "${local.project}-scheduled-backup-${terraform.workspace}"
             description      = "A scheduled backup job for ${terraform.workspace} environment."
@@ -486,18 +489,18 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 1
-            hours_of_day     = ["1", "7"]
+            hours_of_day     = ["2", "7"]
             days_of_week     = ["*"]
             parameters = {
               branch           = terraform.workspace
-              scheduled_backup = true
+              scheduled-backup = true
             }
           }
 
           preprod-scheduled-backup = {
             name             = "${local.project}-scheduled-backup-${terraform.workspace}"
             description      = "A scheduled backup job for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz", "prod"]
+            ignore_workspace = ["bootstrap", "dmz", "prod", "test", "dev"]
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 1
@@ -505,7 +508,7 @@ locals {
             days_of_week     = ["*"]
             parameters = {
               branch           = terraform.workspace
-              scheduled_backup = true
+              scheduled-backup = true
             }
           }
         }
@@ -714,7 +717,7 @@ locals {
           waf = merge(
             local.globals.apps.waf,
             {
-              instances = 2
+              instances = 4
             }
           )
         }
