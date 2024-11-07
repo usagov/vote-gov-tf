@@ -61,7 +61,7 @@ locals {
           terraform.workspace
           )
         )
-        sso_x509_cert = var.sso_x509_cert
+        sso_x509_cert = var.sso_x509_cert[terraform.workspace]
         waf_name      = format(local.env.name_pattern, "waf")
       },
       merge(

@@ -47,8 +47,8 @@ variable "proxy_username" {
 }
 
 variable "sso_x509_cert" {
-  description = "x509 cert used for Secure Auth SSO."
-  type        = string
+  description = "x509 cert used for GSA Auth SSO."
+  type        = map(any)
   sensitive   = true
 }
 
