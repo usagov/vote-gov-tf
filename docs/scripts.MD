@@ -73,3 +73,7 @@ export prefix="name_prefix"
 export spaces="space_name_dev space_name_stage space_name_prod"
 bash init.sh
 ```
+
+## sso-assertion-cert-generate.sh
+
+Script to generate the certs used to encrypt the SAML assertion exchange. These generated values for the crt and key oneline files must be placed into the `terraform.tfvars` file under the appropriate `sso_assertion_*` variable values.

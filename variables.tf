@@ -52,6 +52,19 @@ variable "sso_x509_cert" {
   sensitive   = true
 }
 
+variable "sso_assertion_cert" {
+  description = "x509 cert used for GSA Auth SSO SAML assertion encryption."
+  type        = map(any)
+  sensitive   = true
+}
+
+variable "sso_assertion_key" {
+  description = "x509 key used for GSA Auth SSO SAML assertion encryption."
+  type        = map(any)
+  sensitive   = true
+}
+
+
 # may be needed for bootstrap but variables have been removed
 #variable "backup_aws_bucket_name" {
 #description = "The S3 bucket used for persistent file backups."
