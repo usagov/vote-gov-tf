@@ -11,6 +11,7 @@ provider.tf
 *.log
 *.txt
 .DS_Store
+sso_assertion_certs
 
 # Applications
 *.app

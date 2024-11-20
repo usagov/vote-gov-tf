@@ -254,6 +254,8 @@ locals {
       "drupal_port",
       "hash_salt",
       "sso_x509_cert",
+      "sso_assertion_cert",
+      "sso_assertion_key",
       "waf_name",
       "waf_external_endpoint"
     ]
