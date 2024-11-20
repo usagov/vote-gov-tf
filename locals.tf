@@ -85,7 +85,7 @@ locals {
         }
 
         ## Maximum amount of memory the application can use.
-        #memory = 96
+        ## amount of memory the application uses by default
         memory = terraform.workspace == "prod" ? 512 : 96
 
         ## Addional network policies to add to the application.
@@ -255,6 +255,8 @@ locals {
       "drupal_port",
       "hash_salt",
       "sso_x509_cert",
+      "sso_assertion_cert",
+      "sso_assertion_key",
       "waf_name",
       "waf_external_endpoint"
     ]
@@ -446,23 +448,6 @@ locals {
         ## Scheduled pipeline definitions.
         schedules = {
 
-
-          #dev-test-upkeep = {
-          #name             = "${local.project}-upkeep-for-${terraform.workspace}"
-          #description      = "Run upkeep for ${terraform.workspace} environment."
-          #ignore_workspace = ["bootstrap", "dmz", "stage", "prod"]
-          #organization     = "usagov"
-          #project          = "${local.project_full}-drupal"
-          #per_hour         = 1
-          #hours_of_day     = ["*"]
-          #days_of_week     = ["*"]
-
-          #parameters = {
-          #branch = terraform.workspace
-          #upkeep = true
-          #}
-          #}
-
           stage-prod-upkeep = {
             name             = "${local.project}-upkeep-for-${terraform.workspace}"
             description      = "Run upkeep for ${terraform.workspace} environment."
@@ -470,7 +455,7 @@ locals {
             organization     = "usagov"
             project          = "${local.project_full}-drupal"
             per_hour         = 2
-            hours_of_day     = ["0", "3", "4", "5", "6", "8", "9", "10", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+            hours_of_day     = ["0", "1", "3", "4", "5", "6", "8", "9", "10", "11", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
             days_of_week     = ["*"]
 
             parameters = {
@@ -717,7 +702,7 @@ locals {
           waf = merge(
             local.globals.apps.waf,
             {
-              instances = 4
+              instances = 3
             }
           )
         }
@@ -764,7 +749,7 @@ locals {
           waf = merge(
             local.globals.apps.waf,
             {
-              instances = 2
+              instances = 1
             }
           )
         }
