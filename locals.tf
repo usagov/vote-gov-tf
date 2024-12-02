@@ -84,7 +84,7 @@ locals {
           environment = terraform.workspace
         }
 
-        ## amount of memory the application uses by default
+        ## Amount of memory the application uses by default
         memory = terraform.workspace == "prod" ? 512 : 96
 
         ## Addional network policies to add to the application.
