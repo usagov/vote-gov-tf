@@ -1,5 +1,5 @@
 ARG modsecurity_nginx_version="1.0.3"
-ARG nginx_version="1.27.1"
+ARG nginx_version="1.27.2"
 ARG ubuntu_version="jammy"
 
 FROM docker.io/ubuntu:${ubuntu_version}
