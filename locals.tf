@@ -447,21 +447,21 @@ locals {
         ## Scheduled pipeline definitions.
         schedules = {
 
-          stage-prod-upkeep = {
-            name             = "${local.project}-upkeep-for-${terraform.workspace}"
-            description      = "Run upkeep for ${terraform.workspace} environment."
-            ignore_workspace = ["bootstrap", "dmz", "dev", "test"]
-            organization     = "usagov"
-            project          = "${local.project_full}-drupal"
-            per_hour         = 2
-            hours_of_day     = ["0", "1", "3", "4", "5", "6", "8", "9", "10", "11", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
-            days_of_week     = ["*"]
+          #stage-prod-upkeep = {
+          #name             = "${local.project}-upkeep-for-${terraform.workspace}"
+          #description      = "Run upkeep for ${terraform.workspace} environment."
+          #ignore_workspace = ["bootstrap", "dmz", "dev", "test"]
+          #organization     = "usagov"
+          #project          = "${local.project_full}-drupal"
+          #per_hour         = 2
+          #hours_of_day     = ["0", "1", "3", "4", "5", "6", "8", "9", "10", "11", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+          #days_of_week     = ["*"]
 
-            parameters = {
-              branch = terraform.workspace
-              upkeep = true
-            }
-          }
+          #parameters = {
+          #branch = terraform.workspace
+          #upkeep = true
+          #}
+          #}
 
 
 
