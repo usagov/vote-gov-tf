@@ -116,6 +116,10 @@ locals {
             destination = "${path.cwd}/applications/nginx-waf/nginx/snippets/proxy-to-static.conf"
           },
           {
+            source      = "${path.cwd}/applications/nginx-waf/nginx/snippets/proxy-to-static-assets.conf.tmpl"
+            destination = "${path.cwd}/applications/nginx-waf/nginx/snippets/proxy-to-static-assets.conf"
+          },
+          {
             source      = "${path.cwd}/applications/nginx-waf/nginx/snippets/proxy-to-app.conf.tmpl"
             destination = "${path.cwd}/applications/nginx-waf/nginx/snippets/proxy-to-app.conf"
           }
@@ -332,7 +336,7 @@ locals {
         port = var.mtls_port
 
         ## How much memory should it be using?
-        memory = 1024
+        memory = 970
       }
     }
     test = {
