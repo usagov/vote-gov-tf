@@ -1,4 +1,5 @@
-# Cloud.gov Drupal Infrastructure
+# :warning: [DEPRECATED] Cloud.gov Drupal Infrastructure
+This repository is no longer maintained.
 
 - Applications
     - [Caddy Proxy](applications/caddy-proxy/README.md)
